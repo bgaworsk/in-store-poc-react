@@ -33,14 +33,14 @@ const AppLogo = styled.img`
   height: 40vmin;
   pointer-events: none;
   
-  /*@keyframes App-logo-spin {
+  @keyframes App-logo-spin {
     from {
       transform: rotate(0deg);
     }
     to {
       transform: rotate(360deg);
     }
-  }*/
+  }
 `;
 
 const AppLink = styled.a`
