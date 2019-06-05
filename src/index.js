@@ -4,12 +4,19 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 window.coreMediaWidget = rootNode => {
-  const node = document.getElementById(rootNode);
+  // Assume root node is an ID
+  let node = undefined;
+  if (typeof rootNode !== 'object') {
+    node = document.getElementById(rootNode);
+  } else {
+    node = rootNode;
+  }
+
   if (node) {
-    console.log('Replacing node with id "%s" with CoreMedia Widget ', rootNode);
+    console.log('Replacing node "%s" with CoreMedia Widget ', node);
     ReactDOM.render(<App />, node);
   } else {
-    console.log('Could not find node with id "%s", CoreMedia Widget could not be added to the page', rootNode);
+    console.log('Could not find node "%s", CoreMedia Widget could not be added to the page', node);
   }
 };
 
