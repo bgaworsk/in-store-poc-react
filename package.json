@@ -63,7 +63,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-    "copy-jsto-poc": "node scripts/copy-js-to-poc.js"
+    "copy-js-to-poc": "node scripts/copy-js-to-poc.js"
   },
   "eslintConfig": {
     "extends": "react-app"
