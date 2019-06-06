@@ -1,5 +1,6 @@
-import App from './App';
+import Demo from './Demo';
+import Picture from './Picture';
 
 export default {
-  App
+  Demo, Picture
 }
