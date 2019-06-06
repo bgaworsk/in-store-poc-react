@@ -1,9 +1,9 @@
 import React from 'react';
 import logo from './logo.svg';
 import styled from 'styled-components';
-import ciColours from './lib/CoreMediaColours';
-import coreLight from './fonts/core-light-woff2-data.woff2';
-import simplonNormRegular from './fonts/simplonnorm-regular-webxl-woff2-data.woff2';
+import ciColours from '../../lib/CoreMediaColours';
+import coreLight from '../../fonts/core-light-woff2-data.woff2';
+import simplonNormRegular from '../../fonts/simplonnorm-regular-webxl-woff2-data.woff2';
 
 const AppWrapper = styled.div`
   @font-face {
@@ -65,7 +65,7 @@ font-family: "Core Light", "Simplon Norm Regular", "Lucida Sans", "Lucida Sans U
   margin-bottom: 5%;
 `;
 
-function App() {
+function Index() {
   return (
     <AppWrapper>
       <AppHeader>
@@ -86,4 +86,4 @@ function App() {
   );
 }
 
-export default App;
+export default Index;

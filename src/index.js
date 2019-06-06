@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import components from './components';
 import * as serviceWorker from './serviceWorker';
 
-window.coreMediaWidget = rootNode => {
+window.coreMediaWidget = (rootNode, componentName) => {
   // Assume root node is an ID
   let node = undefined;
   if (typeof rootNode !== 'object') {
@@ -12,17 +12,23 @@ window.coreMediaWidget = rootNode => {
     node = rootNode;
   }
 
+  // Attach component to node
   if (node) {
-    console.log('Replacing node "%s" with CoreMedia Widget ', node);
-    ReactDOM.render(<App />, node);
+    const Component = components[componentName];
+    if (Component) {
+      console.log('Replacing DOM node "%s" with CoreMedia component %s', node, componentName);
+      ReactDOM.render(<Component />, node);
+    } else {
+      console.error('Unknown component %s', componentName);
+    }
   } else {
-    console.log('Could not find node "%s", CoreMedia Widget could not be added to the page', node);
+    console.error('Unknown DOM node "%s", CoreMedia Widget could not be added to the page', node);
   }
 };
 
 // In DEV mode, attach app to node with ID 'root'
 if (process.env.NODE_ENV === 'development') {
-  window.coreMediaWidget('root');
+  window.coreMediaWidget('root', 'App');
 }
 
 // If you want your app to work offline and load faster, you can change
