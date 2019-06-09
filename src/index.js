@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import components from './components';
-import HeadlessClient from './lib/headless-client';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
@@ -32,9 +31,6 @@ window.coreMediaWidget = (rootNode, componentName) => {
 if (process.env.NODE_ENV === 'development') {
   window.coreMediaWidget('root', 'Picture');
 }
-
-// TODO REMOVE --- DEBUG
-HeadlessClient.test();
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
