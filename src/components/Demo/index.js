@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import styled from 'styled-components';
-import ciColours from '../../lib/CoreMediaColours';
+import ciColours from '../../lib/coremedia-colors';
 import coreLight from '../../fonts/core-light-woff2-data.woff2';
 import simplonNormRegular from '../../fonts/simplonnorm-regular-webxl-woff2-data.woff2';
 

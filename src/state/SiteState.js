@@ -1,5 +1,5 @@
 import {configure, observable, runInAction} from 'mobx'
-import HeadlessClient from '../lib/headless-client'
+import HeadlessClient from '../lib/coremedia-client'
 
 configure({ enforceActions: "observed" });
 
@@ -16,7 +16,27 @@ const SiteState = observable.object({
     );
     // TODO Error handling
   },
-  getSite(siteId) { return this.sites.find(site => site.id === siteId) }
+  getSite(siteId) { return this.sites.find(site => site.id === siteId) },
+
+  getCropsOf(siteId) {
+    const site = this.getSite(siteId);
+    if (!site) {
+      return [];
+    }
+    return site.crops;
+  },
+
+  getCropWidthsOf(siteId, ratio) {
+    const site = this.getSite(siteId);
+    if (!site) {
+      return [];
+    }
+    const crop = site.crops.find(crop => crop.name === ratio);
+    if (!crop) {
+      return [];
+    }
+    return crop.sizes.map(size => size.width);
+  }
 
 });
 
