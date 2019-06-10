@@ -56,7 +56,10 @@ export default {
 
   formatImageUrl: (uriTemplate, cropName, width) => uriTemplate
     .replace(URI_TEMPLATE_CROP_NAME, cropName)
-    .replace(URI_TEMPLATE_WIDTH, width)
+    .replace(URI_TEMPLATE_WIDTH, width),
+
+  // TODO Why is this hack needed?
+  dateToISO: date => date.substr(0, date.length-5)
 
 }
 
