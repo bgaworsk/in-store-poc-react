@@ -29,7 +29,7 @@ window.coreMediaWidget = (rootNode, componentName) => {
 
 // In DEV mode, attach app to node with ID 'root'
 if (process.env.NODE_ENV === 'development') {
-  window.coreMediaWidget('root', 'Picture');
+  window.coreMediaWidget('root', 'Loading');
 }
 
 // If you want your app to work offline and load faster, you can change

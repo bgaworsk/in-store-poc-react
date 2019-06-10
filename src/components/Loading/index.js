@@ -2,23 +2,15 @@ import React from 'react';
 import logo from './logo.svg';
 import styled from 'styled-components';
 import ciColours from '../../lib/coremedia-colors';
-import coreLight from '../../fonts/core-light-woff2-data.woff2';
 import simplonNormRegular from '../../fonts/simplonnorm-regular-webxl-woff2-data.woff2';
 
 const AppWrapper = styled.div`
   @font-face {
-  font-family: "Core Light";
-  font-weight: 500;
-  font-style: normal;
-  src: url(${coreLight}) format("woff2");
-}
-
-@font-face {
-  font-family: "Simplon Norm Regular";
-  font-weight: 500;
-  font-style: normal;
-  src: url(${simplonNormRegular}) format("woff2");
-}
+    font-family: "Simplon Norm Regular";
+    font-weight: 500;
+    font-style: normal;
+    src: url(${simplonNormRegular}) format("woff2");
+  }
 
   height: 100%;
   text-align: center;
@@ -45,9 +37,9 @@ const AppHeader = styled.header`
 `;
 
 const AppLogo = styled.img`
-  animation: App-logo-spin infinite 20s linear;
-  margin-top: 5%;
+  animation: App-logo-spin infinite 10s linear;
   pointer-events: none;
+  height: 50%;
   
   @keyframes App-logo-spin {
     from {
@@ -59,11 +51,16 @@ const AppLogo = styled.img`
   }
 `;
 
+const Title = styled.div`
+  margin-top: 2vh;
+`;
+
 function Index() {
   return (
     <AppWrapper>
       <AppHeader>
         <AppLogo src={logo} alt="logo" />
+        <Title>Loading …</Title>
       </AppHeader>
     </AppWrapper>
   );
