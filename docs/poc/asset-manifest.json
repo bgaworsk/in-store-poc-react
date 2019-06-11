@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.js": "/static/js/main.3d40588f.js",
+    "main.js.map": "/static/js/main.3d40588f.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.e64bf3fcd75c453a179736822b3cfefe.js": "/precache-manifest.e64bf3fcd75c453a179736822b3cfefe.js",
+    "service-worker.js": "/service-worker.js",
+    "static/media/core-light-woff2-data.woff2": "/static/media/core-light-woff2-data.a31b756f.woff2",
+    "static/media/simplonnorm-medium-webxl-woff2-data.woff2": "/static/media/simplonnorm-medium-webxl-woff2-data.a1bed976.woff2",
+    "static/media/simplonnorm-regular-webxl-woff2-data.woff2": "/static/media/simplonnorm-regular-webxl-woff2-data.16ac8ac8.woff2"
+  }
+}
