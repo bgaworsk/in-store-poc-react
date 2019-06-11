@@ -1,15 +1,29 @@
+import axios from 'axios'
+
 export const ENDPOINT = "https://preview-1901.livecontext.coremedia.com";
+
+// Default request options
+const axiosConfig = {
+  headers: {
+    'Content-type': 'application/json'
+  }
+};
+
+const addClientHeader = clientId => { return { ...axiosConfig, headers: { ...axiosConfig.headers, 'X-CM_CLIENT': clientId } } };
 
 export default {
 
   fetchPlaylistJSON(deviceId, clientId) {
 
-    return fetch(`${ENDPOINT}/instore/${deviceId}/playlist?clientId=${clientId}`)
+    return axios.get(
+      `${ENDPOINT}/instore/${deviceId}/playlist`,
+      addClientHeader(clientId)
+    )
       .then((response) => {
-        return response.json();
+        return response.data;
       })
-      .catch(() => {
-        console.warn("Unable to reach endpoint");
+      .catch((error) => {
+        console.warn("Unable to reach endpoint", error);
         return null;
       });
 
@@ -20,7 +34,7 @@ export default {
       const mediaSrc = item.media.src;
       if (mediaSrc) {
         let uri = (mediaSrc.indexOf("http") === 0 ? '' : ENDPOINT ) + mediaSrc;
-        fetch(uri).then(() => {
+        axios.get(uri).then(() => {
           console.info(`Prefetched media for uri ${uri}`);
         });
       }
