@@ -9,7 +9,7 @@ const axiosConfig = {
   }
 };
 
-const addClientHeader = clientId => { return { ...axiosConfig, headers: { ...axiosConfig.headers, 'X-CM_CLIENT': clientId } } };
+const addClientHeader = clientId => { return { ...axiosConfig, headers: { ...axiosConfig.headers, 'X-CM-CLIENT': clientId } } };
 
 export default {
 
