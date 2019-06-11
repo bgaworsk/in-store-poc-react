@@ -1,6 +1,8 @@
 import {configure, observable, action, runInAction} from 'mobx';
 import client from '../lib/stage-client'
 
+configure({ enforceActions: "observed" });
+
 const stageState = observable.object({
 
   mainTimeline: [],

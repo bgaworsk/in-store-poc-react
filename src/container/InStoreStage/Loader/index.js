@@ -4,6 +4,7 @@ import logo from './logo.svg';
 import { TweenMax, TimelineMax } from "gsap/all";
 
 const Loader = styled.div`
+  position: absolute;
   background-color: #000;
   color: #fff;
   width: 100vw;
@@ -26,12 +27,14 @@ const LoadingIndicator = styled.div`
   border-radius: 50px;
 `;
 
-export default ({ loadComplete }) => {
+export default ({ isLoadComplete, loadComplete, setLoaderHidden }) => {
   const [loadingIndicator, setLoadingIndicator] = useState(null);
+  const [logo, setLogo] = useState(null);
   const [loader, setLoader] = useState(null);
 
   useEffect(() => {
-    if (loadingIndicator === null || loader == null) return;
+    // Do not render animation, if load is already completed or DOM elements are not available
+    if (isLoadComplete || loadingIndicator === null || logo === null) return;
 
     let loaderTimeline;
 
@@ -40,12 +43,18 @@ export default ({ loadComplete }) => {
     ;
 
     loaderTimeline = new TimelineMax({onUpdate: updateLoadingIndicatorFn});
-    loaderTimeline.add(TweenMax.fromTo(loader, 2, {scale: 0, top: "100%", opacity: 0}, {scale: 1, top: "50%", opacity: 1, onComplete: loadComplete}));
-  }, [loadingIndicator, loader, loadComplete])
+    loaderTimeline.add(TweenMax.fromTo(logo, 2, {scale: 0, top: "100%", opacity: 0}, {scale: 1, top: "50%", opacity: 1, onComplete: loadComplete}));
+  }, [loadingIndicator, logo, loadComplete, isLoadComplete])
+
+  useEffect(() => {
+    if (isLoadComplete && loader) {
+      TweenMax.to(loader, 0.5, {y: -loader.offsetHeight, onComplete: setLoaderHidden});
+    }
+  }, [isLoadComplete, loader, setLoaderHidden]);
 
   return (
-    <Loader>
-      <Logo ref={element => setLoader(element)}/>
+    <Loader ref={element => setLoader(element)}>
+      <Logo ref={element => setLogo(element)}/>
       <LoadingIndicator ref={element => setLoadingIndicator(element)}/>
     </Loader>
   );

@@ -2,6 +2,7 @@ export default {
 
   turquoise: '#6FC3B8',
   purple: '#5f2e75',
+  lightPurple: '#9444b4',
   red: '#DD342B',
   yellow: '#ecdd4c',
   blue: '#006cae',

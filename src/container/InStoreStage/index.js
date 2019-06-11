@@ -6,8 +6,22 @@ import Setup from './Setup';
 import Loader from './Loader';
 import deviceState from './state/device';
 import Stage from './Stage';
+import coremediaLogoWhite from './coremedia-logo-white.svg';
+import simplonNormRegular from '../../fonts/simplonnorm-regular-webxl-woff2-data.woff2';
 
 const Body = styled.div`
+  @font-face {
+    font-family: "Simplon Norm Regular";
+    font-weight: 500;
+    font-style: normal;
+    src: url(${simplonNormRegular}) format("woff2");
+  }
+
+  font-family: "Simplon Norm Regular", "Lucida Sans", "Lucida Sans Unicode", "Lucida Grande", Arial, Helvetica, sans-serif;
+  font-size: 2rem;
+  color: #fff;
+  height: 100%;
+
   width: 100vw;
   height: 100vh;
   background-image: linear-gradient(${colors.lightBlue}, ${colors.blue});
@@ -21,26 +35,35 @@ const Body = styled.div`
   }
 `;
 
+const Logo = styled.div`
+  position: fixed;
+  left: 12px;
+  bottom: 12px;
+  background: url(${coremediaLogoWhite}) no-repeat;
+  height: 24px;
+  width: 100%;
+`;
+
 const InStoreStorage = () => {
 
   const isSetup = deviceState.deviceId && deviceState.clientId;
   const [isLoadComplete, setLoadComplete] = useState(false);
-  const [loader, setLoader] = useState(null);
+  const [loaderIsHidden, setLoaderIsHidden] = useState(false);
 
-  const loadIsCompleted = () => {
-    //TweenMax.to(loader, 0.5, {y: -loader.offsetHeight, onComplete: () => setLoadComplete(true)});
-    setLoadComplete(true);
-  }
+  const child = isSetup
+    ? (
+      <>
+        <Stage loaderIsHidden={loaderIsHidden}/>
+        <Loader isLoadComplete={isLoadComplete} loadComplete={() => setLoadComplete(true)} setLoaderHidden={() => setLoaderIsHidden(true)}/>
+      </>
+    )
+    : <Setup storeDeviceId={deviceState.setDeviceId}/>
 
   return (
     <Body>
-      {isSetup
-        ? isLoadComplete
-          ? <Stage />
-          : <Loader loadComplete={loadIsCompleted} forwardRef={element => setLoader(element)}/>
-        : <Setup storeDeviceId={deviceState.setDeviceId}/>}
+      {child}
       <textarea id="console" name="console" className="hidden" />
-      <div id="logo"/>
+      <Logo />
     </Body>
   )
 };
