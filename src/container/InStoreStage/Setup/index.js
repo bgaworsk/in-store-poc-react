@@ -1,6 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import colors from '../../../lib/coremedia-colors';
+import deviceState from '../state/device';
+
+const Code = styled.code`
+  background-color: ${colors.gray};
+  color: ${colors.purple};
+  padding: 4px;
+  border-radius: 4px;
+`;
 
 const Setup = styled.div` 
   color: #1a1919;
@@ -21,16 +29,13 @@ const Setup = styled.div`
   button {
     font-size: 1.5rem;
     margin-top: 1em;
-    padding: 0.3em;
+    padding: 0.3em 0;
     border-radius: 5px;
     border: none;
     font-weight: bold;
     display: block;
     width: 100%;
-    padding-left: 0;
-    padding-right: 0;
     color: #fff;
-    border-color: #672779;
     background-color: #75c4ba;
     background-image: linear-gradient(${colors.lightPurple}, ${colors.purple});
     cursor: pointer;
@@ -75,8 +80,10 @@ export default ({ storeDeviceId }) => {
       <Wrapper>
         <h1>Setup</h1>
         <div>
-          <p>Enter the device ID that has been set up for this device in CoreMedia Content Cloud.</p>
-
+          <p>
+            Please enter the device ID that has been set up for the device with
+            client ID <Code>{deviceState.clientId}</Code> in CoreMedia Content Cloud.
+          </p>
           <label htmlFor="setup_deviceId">Device ID</label>
           <input id="setup_deviceId" type="text" name="deviceId" value={deviceId} onChange={updateState} onKeyUp={keyUp} />
         </div>

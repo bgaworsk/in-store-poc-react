@@ -5,14 +5,13 @@ configure({ enforceActions: "observed" });
 
 const stageState = observable.object({
 
-  mainTimeline: null,
   currentStage: null,
   currentStageIndex: -1,
   availableStages: [],
   playlistId: null,
 
-  fetchPlaylist(deviceId) {
-    client.fetchPlaylistJSON(deviceId).then(
+  fetchPlaylist(deviceId, clientId) {
+    client.fetchPlaylistJSON(deviceId, clientId).then(
       playlist => runInAction(() => {
         this.playlistId = playlist.id;
         this.availableStages = playlist.items;
@@ -23,7 +22,6 @@ const stageState = observable.object({
       }));
   },
 
-  setMainTimeline: timeline => this.mainTimeline = timeline,
   nextStage() {
     if (this.availableStages.length > 0) {
       this.currentStageIndex = ++this.currentStageIndex % this.availableStages.length;

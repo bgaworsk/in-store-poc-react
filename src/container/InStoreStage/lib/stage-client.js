@@ -2,9 +2,9 @@ export const ENDPOINT = "https://preview-1901.livecontext.coremedia.com";
 
 export default {
 
-  fetchPlaylistJSON(deviceId) {
+  fetchPlaylistJSON(deviceId, clientId) {
 
-    return fetch(`${ENDPOINT}/instore/${deviceId}/playlist`)
+    return fetch(`${ENDPOINT}/instore/${deviceId}/playlist?clientId=${clientId}`)
       .then((response) => {
         return response.json();
       })

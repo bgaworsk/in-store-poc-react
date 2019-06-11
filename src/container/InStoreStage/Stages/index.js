@@ -19,7 +19,7 @@ const Stages = ({ loaderIsHidden }) => {
 
   useEffect(() => {
     if (stageState.playlistId === null) {
-      stageState.fetchPlaylist(deviceState.deviceId);
+      stageState.fetchPlaylist(deviceState.deviceId, deviceState.clientId);
     }
   }, [playlistId]);
 
