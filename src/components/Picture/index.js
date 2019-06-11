@@ -55,6 +55,7 @@ const Back = styled(animated.div)`
   width: 100%;
   padding: 4vw;
   will-change: transform, opacity;
+  color: #000;
 `;
 
 // TODO No polyfill for img srcset loaded, this will not work in IE, e.g. https://www.npmjs.com/package/picturefill
