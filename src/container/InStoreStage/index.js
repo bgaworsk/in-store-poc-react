@@ -5,7 +5,7 @@ import colors from '../../lib/coremedia-colors';
 import Setup from './Setup';
 import Loader from './Loader';
 import deviceState from './state/device';
-import Stage from './Stage';
+import Stage from './Stages';
 import coremediaLogoWhite from './coremedia-logo-white.svg';
 import simplonNormRegular from '../../fonts/simplonnorm-regular-webxl-woff2-data.woff2';
 

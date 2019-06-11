@@ -1,4 +1,4 @@
-const ENDPOINT = "https://preview-1901.livecontext.coremedia.com";
+export const ENDPOINT = "https://preview-1901.livecontext.coremedia.com";
 
 export default {
 
@@ -13,6 +13,19 @@ export default {
         return null;
       });
 
+  },
+
+  prefetchMedia(items) {
+    items.map(item => {
+      const mediaSrc = item.media.src;
+      if (mediaSrc) {
+        let uri = (mediaSrc.indexOf("http") === 0 ? '' : ENDPOINT ) + mediaSrc;
+        fetch(uri).then(() => {
+          console.info(`Prefetched media for uri ${uri}`);
+        });
+      }
+      return '';
+    });
   }
 
 }

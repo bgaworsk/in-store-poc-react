@@ -68,6 +68,7 @@ const AlignRight = styled.div`
 export default ({ storeDeviceId }) => {
   const [deviceId, setDeviceId] = useState('');
   const updateState = event => setDeviceId(event.target.value);
+  const keyUp = event => event.keyCode === 13 && storeDeviceId(deviceId);
 
   return (
     <Setup>
@@ -77,7 +78,7 @@ export default ({ storeDeviceId }) => {
           <p>Enter the device ID that has been set up for this device in CoreMedia Content Cloud.</p>
 
           <label htmlFor="setup_deviceId">Device ID</label>
-          <input id="setup_deviceId" type="text" name="deviceId" value={deviceId} onChange={updateState} />
+          <input id="setup_deviceId" type="text" name="deviceId" value={deviceId} onChange={updateState} onKeyUp={keyUp} />
         </div>
         <AlignRight>
           <button className="btn btn-primary btn-block" onClick={() => storeDeviceId(deviceId)}>Save</button>
