@@ -5,6 +5,8 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import InStoreStage from '../src/container/InStoreStage';
 
+const augmentedComponents = {...components, InStoreStage };
+
 window.coreMediaWidget = (rootNode, component) => {
   // Assume root node is an ID
   let node = undefined;
@@ -16,7 +18,7 @@ window.coreMediaWidget = (rootNode, component) => {
 
   // Attach component to node
   if (node) {
-    const Component = typeof component === 'string' ? components[component] : component;
+    const Component = typeof component === 'string' ? augmentedComponents[component] : component;
     if (Component) {
       console.log('Replacing DOM node "%s" with CoreMedia component %s', node, component);
       ReactDOM.render(<App><Component /></App>, node);
@@ -27,11 +29,6 @@ window.coreMediaWidget = (rootNode, component) => {
     console.error('Unknown DOM node "%s", CoreMedia Widget could not be added to the page', node);
   }
 };
-
-// In DEV mode, attach app to node with ID 'root'
-if (process.env.NODE_ENV === 'development') {
-  window.coreMediaWidget('root', InStoreStage);
-}
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
