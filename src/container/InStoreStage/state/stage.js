@@ -1,12 +1,11 @@
 import {configure, observable, action, runInAction} from 'mobx';
-import client from '../lib/stage-client'
+import client from '../lib/stage-client';
+import demoData from './demo.json';
 
 configure({ enforceActions: "observed" });
 
 const stageState = observable.object({
 
-  currentStage: null,
-  currentStageIndex: -1,
   availableStages: [],
   playlistId: null,
 
@@ -15,7 +14,8 @@ const stageState = observable.object({
       playlist => runInAction(() => {
         if (!playlist) {
           console.warn('Loaded playlist is empty');
-          this.playlistId = -1;
+          this.playlistId = demoData.id;
+          this.availableStages = demoData.items;
           return;
         }
         this.playlistId = playlist.id;

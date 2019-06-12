@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import uuidv4 from 'uuid/v4';
 import { TimelineMax, Power2 } from 'gsap/all';
 import { ENDPOINT } from "../../lib/stage-client";
-import logo from "../../Loader/logo.svg";
 
 const QUICK_INFO_WIDTH = "20vw";
 
 const StageWrapper = styled.div`
   position: relative;
-  background: no-repeat center url(${logo});
   background-size: 50% 50%;
   height: 100vh;
   width: 100vw;
   margin: 0;
   padding: 0;
+  opacity: 0;
+  display: none;
 `;
 
 const ImgWrapper = styled.div`
   position: relative;
-  opacity: 0;
   max-height: 100vh;
   max-width: 100vw;
   overflow: hidden;
@@ -79,7 +79,7 @@ const QuickInfoSku = styled.span`
   color: #666;
 `;
 
-const Stage = ({ mediaSrc, overlay, data, transitionToNextStage, duration }) => {
+const Stage = ({ mediaSrc, overlay, data, addToMainTimeline, duration }) => {
   const [imgWrapper, setImgWrapper] = useState(null);
   const [stageWrapper, setStageWrapper] = useState(null);
 
@@ -87,46 +87,45 @@ const Stage = ({ mediaSrc, overlay, data, transitionToNextStage, duration }) => 
     if (!imgWrapper || !stageWrapper) return;
 
     // Setup stageTimeline for stage
-    const mainTimeline = new TimelineMax({
+    const timeline = new TimelineMax({
       repeat: 0,
       delay: .7,
       paused: true,
-      onComplete: transitionToNextStage,
       yoyo: true,
       autoRemoveChildren: true
     });
 
     // Blend in image
-    mainTimeline.to(imgWrapper, 2, {opacity: 1, delay: .5});
+    timeline.to(stageWrapper, 2, {autoAlpha: 1, delay: .5});
 
     // Default timeline, no display data available
     if (data.length < 1) {
-      mainTimeline.to(stageWrapper, duration > 0 ? duration : 3, {left: 0, ease: Power2.easeInOut, delay: 2});
+      timeline.to(stageWrapper, duration > 0 ? duration : 3, {left: 0, ease: Power2.easeInOut, delay: 2});
     }
     // Else show quick infos
     else {
-      mainTimeline.to(stageWrapper, 3, {left: QUICK_INFO_WIDTH, ease: Power2.easeInOut, delay: 2});
-      mainTimeline.to(stageWrapper, 3, {left: 0, ease: Power2.easeInOut, delay: 2});
-      mainTimeline.to(stageWrapper, 3, {left: `-${QUICK_INFO_WIDTH}`, ease: Power2.easeInOut, delay: 2});
-      mainTimeline.to(stageWrapper, 3, {left: 0, ease: Power2.easeInOut, delay: 2});
+      timeline.to(stageWrapper, 3, {left: QUICK_INFO_WIDTH, ease: Power2.easeInOut, delay: 2});
+      timeline.to(stageWrapper, 3, {left: 0, ease: Power2.easeInOut, delay: 2});
+      timeline.to(stageWrapper, 3, {left: `-${QUICK_INFO_WIDTH}`, ease: Power2.easeInOut, delay: 2});
+      timeline.to(stageWrapper, 3, {left: 0, ease: Power2.easeInOut, delay: 2});
     }
 
     // Blend out image
-    mainTimeline.to(imgWrapper, .5, {opacity: 0});
+    timeline.to(stageWrapper, .5, {autoAlpha: 0});
 
-    // Start timeline
-    mainTimeline.resume();
+    // Add to main timeline
+    addToMainTimeline(uuidv4(), timeline);
 
     // Kill stageTimeline on component detach
-    return () => mainTimeline.kill();
-  }, [imgWrapper, transitionToNextStage, duration, stageWrapper, mediaSrc, data]);
+    return () => timeline.kill();
+  }, [imgWrapper, addToMainTimeline, duration, stageWrapper, mediaSrc, data]);
 
   return (
     <StageWrapper ref={element => setStageWrapper(element)}>
       <ImgWrapper ref={element => setImgWrapper(element)} >
         <Img src={(mediaSrc.indexOf("http") === 0 ? '' : ENDPOINT ) + mediaSrc}/>
         {overlay && (
-          <OverlayText top={overlay.position.top} left={overlay.position.left}>
+          <OverlayText top={overlay.positionX} left={overlay.positionY}>
             <div>
               <h1>{overlay.title}</h1>
               <span>{overlay.text}</span>
