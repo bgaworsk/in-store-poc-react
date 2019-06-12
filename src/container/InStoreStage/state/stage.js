@@ -13,6 +13,11 @@ const stageState = observable.object({
   fetchPlaylist(deviceId, clientId) {
     client.fetchPlaylistJSON(deviceId, clientId).then(
       playlist => runInAction(() => {
+        if (!playlist) {
+          console.warn('Loaded playlist is empty');
+          this.playlistId = -1;
+          return;
+        }
         this.playlistId = playlist.id;
         this.availableStages = playlist.items;
 
