@@ -1,14 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import colors from '../../../lib/coremedia-colors';
 import deviceState from '../state/device';
-
-const Code = styled.code`
-  background-color: ${colors.gray};
-  color: ${colors.purple};
-  padding: 4px;
-  border-radius: 4px;
-`;
 
 const Setup = styled.div` 
   color: #1a1919;
@@ -71,9 +64,16 @@ const AlignRight = styled.div`
 `;
 
 export default ({ storeDeviceId }) => {
-  const [deviceId, setDeviceId] = useState('');
+  const [deviceId, setDeviceId] = useState(deviceState.deviceId);
+  const [input, setInput] = useState(null);
   const updateState = event => setDeviceId(event.target.value);
   const keyUp = event => event.keyCode === 13 && storeDeviceId(deviceId);
+
+  useEffect(() => {
+    if (!input) return;
+    input.focus();
+    input.select();
+  },[input] );
 
   return (
     <Setup>
@@ -81,14 +81,24 @@ export default ({ storeDeviceId }) => {
         <h1>Setup</h1>
         <div>
           <p>
-            Please enter the device ID that has been set up for the device with
-            client ID <Code>{deviceState.clientId}</Code> in CoreMedia Content Cloud.
+            Please enter the device ID that has been set up for the device
+            in CoreMedia Content Cloud
+            or confirm the ID that was automatically created.
           </p>
           <label htmlFor="setup_deviceId">Device ID</label>
-          <input id="setup_deviceId" type="text" name="deviceId" value={deviceId} onChange={updateState} onKeyUp={keyUp} />
+          <input
+            id="setup_deviceId"
+            type="text"
+            name="deviceId"
+            ref={element => setInput(element)}
+            value={deviceId}
+            onChange={updateState}
+            onKeyUp={keyUp} />
         </div>
         <AlignRight>
-          <button className="btn btn-primary btn-block" onClick={() => storeDeviceId(deviceId)}>Save</button>
+          <button className="btn btn-primary btn-block" onClick={() => storeDeviceId(deviceId)}>
+            Save & Confirm
+          </button>
         </AlignRight>
       </Wrapper>
     </Setup>

@@ -46,7 +46,7 @@ const Logo = styled.div`
 
 const InStoreStorage = () => {
 
-  const isSetup = deviceState.deviceId && deviceState.clientId;
+  const isSetup = deviceState.deviceId && deviceState.clientId && deviceState.deviceIdConfirmed;
   const [isLoadComplete, setLoadComplete] = useState(false);
   const [loaderIsHidden, setLoaderIsHidden] = useState(false);
 

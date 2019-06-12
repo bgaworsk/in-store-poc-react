@@ -10,6 +10,7 @@ const deviceState = observable.object({
 
   clientId: '',
   deviceId: '',
+  deviceIdConfirmed: false,
 
   initialiseClientId() {
     // Initialise PWA ID, if not set
@@ -30,12 +31,21 @@ const deviceState = observable.object({
 
   initialiseDeviceId() {
     this.deviceId = window.localStorage.getItem(DEVICE_ID);
-    console.log(`Device ID: ${this.deviceId}`);
+    let confirmed;
+    if (!this.deviceId) {
+      this.deviceId = uuidv4();
+      confirmed = 'unconfirmed';
+    } else {
+      this.deviceIdConfirmed = true;
+      confirmed = 'confirmed';
+    }
+    console.log(`Device ID: ${this.deviceId}, ${confirmed}`);
   },
   setDeviceId(id) {
-    console.log(`Saving device id '${id}' to local storage.`);
+    console.log(`Saving device id '${id}' to local storage and confirming it.`);
     window.localStorage.setItem(DEVICE_ID, id);
     this.deviceId = id;
+    this.deviceIdConfirmed = true;
   }
 
 }, {
