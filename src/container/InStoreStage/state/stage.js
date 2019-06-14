@@ -13,13 +13,13 @@ const stageState = observable.object({
     client.fetchPlaylistJSON(deviceId, clientId).then(
       playlist => runInAction(() => {
         if (!playlist) {
-          console.warn('Loaded playlist is empty');
-          this.playlistId = demoData.id;
+          console.warn('Loaded playlist is empty, falling back to demo date, using', demoData.items);
           this.availableStages = demoData.items;
+          this.playlistId = demoData.id;
           return;
         }
-        this.playlistId = playlist.id;
         this.availableStages = playlist.items;
+        this.playlistId = playlist.id;
 
         client.prefetchMedia(playlist.items);
 

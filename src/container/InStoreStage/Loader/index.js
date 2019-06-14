@@ -1,61 +1,79 @@
-import React,{ useEffect, useState }  from 'react';
+import React,{ useState }  from 'react';
 import styled from 'styled-components';
+import { useSpring, config, animated } from 'react-spring';
 import logo from './logo.svg';
-import { TweenMax, TimelineMax } from "gsap/all";
 
-const Loader = styled.div`
+const Loader = styled(animated.div)`
   position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   background-color: #000;
   color: #fff;
   width: 100vw;
   height: 100vh;
 `;
 
-const Logo = styled.div`
-  width: 100px;
-  height: 100px;
-  background-image: url(${logo});
-  background-size: cover;
-  margin: 20% auto 20px auto;
+const Container = styled.div`
+  justify-content: center;
 `;
 
-const LoadingIndicator = styled.div`
-  width: 250px;
+const Logo = styled(animated.img)`
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+`;
+
+const LogoContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20vw;
+  height: 20vh;
+  margin: 24px auto;
+`;
+
+const LoadingIndicator = styled(animated.div)`
+  width: 20vw;
   height: 5px;
-  margin: 10px auto;
   background-color: white;
   border-radius: 50px;
+  transform-origin: 0 0;
+  transform: scaleX(0);
 `;
 
-export default ({ isLoadComplete, loadComplete, setLoaderHidden }) => {
-  const [loadingIndicator, setLoadingIndicator] = useState(null);
-  const [logo, setLogo] = useState(null);
-  const [loader, setLoader] = useState(null);
+export default ({ loadComplete }) => {
 
-  useEffect(() => {
-    // Do not render animation, if load is already completed or DOM elements are not available
-    if (isLoadComplete || loadingIndicator === null || logo === null) return;
+  // Use state to manage when load is completed
+  const [isLoaded, setIsLoaded] = useState(false);
 
-    let loaderTimeline;
+  // Grow logo in size
+  const logoProps = useSpring({
+    from: {opacity: 0, width: '0%', height: '0%'},
+    to: {opacity: 1, width: '100%', height: '100%'},
+  });
 
-    const updateLoadingIndicatorFn = () =>
-      TweenMax.set(loadingIndicator, {scaleX:loaderTimeline.progress(), transformOrigin:"0px 0px"});
-    ;
+  // Animate progress bar, when completed, set loaded to true
+  const loadingProps = useSpring({
+    from: {x:0}, to: {x:1},
+    onRest: () => setIsLoaded(true)
+  });
 
-    loaderTimeline = new TimelineMax({onUpdate: updateLoadingIndicatorFn});
-    loaderTimeline.add(TweenMax.fromTo(logo, 2, {scale: 0, top: "100%", opacity: 0}, {scale: 1, top: "50%", opacity: 1, onComplete: loadComplete}));
-  }, [loadingIndicator, logo, loadComplete, isLoadComplete])
-
-  useEffect(() => {
-    if (isLoadComplete && loader) {
-      TweenMax.to(loader, 0.5, {y: -loader.offsetHeight, onComplete: setLoaderHidden});
-    }
-  }, [isLoadComplete, loader, setLoaderHidden]);
+  // Once loaded, the whole loader screen moves up, when completed the load completed is called back
+  const loaderProps = useSpring({
+    from: {top: '0vh'}, to: { top: isLoaded ? '-100vh' : '0vh'},
+    onRest: loadComplete
+  });
 
   return (
-    <Loader ref={element => setLoader(element)}>
-      <Logo ref={element => setLogo(element)}/>
-      <LoadingIndicator ref={element => setLoadingIndicator(element)}/>
+    <Loader style={loaderProps}>
+      <Container>
+        <LogoContainer>
+          <Logo src={logo} alt="CoreMedia Logo" style={logoProps}/>
+        </LogoContainer>
+        <LoadingIndicator style={{ transform: loadingProps.x.interpolate(x => `scaleX(${x})`) }}/>
+      </Container>
     </Loader>
   );
 }

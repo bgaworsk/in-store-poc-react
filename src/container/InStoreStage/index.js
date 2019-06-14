@@ -5,7 +5,7 @@ import colors from '../../lib/coremedia-colors';
 import Setup from './Setup';
 import Loader from './Loader';
 import deviceState from './state/device';
-import Stage from './Stages';
+import Stages from './Stages';
 import coremediaLogoWhite from './coremedia-logo-white.svg';
 import simplonNormRegular from '../../fonts/simplonnorm-regular-webxl-woff2-data.woff2';
 
@@ -48,13 +48,12 @@ const InStoreStorage = () => {
 
   const isSetup = deviceState.deviceId && deviceState.clientId && deviceState.deviceIdConfirmed;
   const [isLoadComplete, setLoadComplete] = useState(false);
-  const [loaderIsHidden, setLoaderIsHidden] = useState(false);
 
   const child = isSetup
     ? (
       <>
-        <Stage loaderIsHidden={loaderIsHidden}/>
-        <Loader isLoadComplete={isLoadComplete} loadComplete={() => setLoadComplete(true)} setLoaderHidden={() => setLoaderIsHidden(true)}/>
+        <Stages />
+        <Loader isLoadComplete={isLoadComplete} loadComplete={() => setLoadComplete(true)} />
       </>
     )
     : <Setup storeDeviceId={deviceState.setDeviceId}/>

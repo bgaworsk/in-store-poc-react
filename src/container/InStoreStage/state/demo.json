@@ -2,13 +2,41 @@
   "id": "billboard-sfra-95244",
   "items": [
     {
+      "id": 1,
       "repeat": 0,
       "duration": 5,
       "media": {
-        "src": "http://6iee.com/data/uploads/18/473327.jpg",
+        "src": "http://tty7.de/assets/images/slides/sydney-2000.jpg",
         "type": "IMAGE",
         "overlay": {
           "title": "Summer Image Map",
+          "text": "<div xmlns=\"http://www.coremedia.com/2003/richtext-1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"><p class=\"p--heading-1 align--center\">Summer Accessories</p><p class=\"align--center\">The new style in 2019</p></div>",
+          "positionX": 33,
+          "positionY": 0,
+          "style": "Light",
+          "width": 0,
+          "enabled": true
+        }
+      },
+      "data": [
+        {
+          "title": "Silver Earrings",
+          "text": " Complete the look and make your style iconic.",
+          "offerPrice": "£12.80",
+          "listPrice": "£12.80",
+          "sku": "25492705M"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "repeat": 0,
+      "duration": 5,
+      "media": {
+        "src": "http://tty7.de/assets/images/slides/sydney-2000.jpg",
+        "type": "IMAGE",
+        "overlay": {
+          "title": "Winter Image Map",
           "text": "<div xmlns=\"http://www.coremedia.com/2003/richtext-1.0\" xmlns:xlink=\"http://www.w3.org/1999/xlink\"><p class=\"p--heading-1 align--center\">Summer Accessories</p><p class=\"align--center\">The new style in 2019</p></div>",
           "positionX": 33,
           "positionY": 0,
