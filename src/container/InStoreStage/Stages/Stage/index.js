@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import uuidv4 from 'uuid/v4';
-import { TimelineMax, Power2 } from 'gsap/all';
 import { ENDPOINT } from "../../lib/stage-client";
 
 const QUICK_INFO_WIDTH = "20vw";
@@ -79,11 +77,14 @@ const QuickInfoSku = styled.span`
   color: #666;
 `;
 
-const Stage = ({ mediaSrc, overlay, data, addToMainTimeline, duration }) => {
-  const [imgWrapper, setImgWrapper] = useState(null);
-  const [stageWrapper, setStageWrapper] = useState(null);
+const Stage = ({ stage }) => {
 
-  useEffect(() => {
+  const media = stage.media;
+  const data = stage.data;
+
+  if (!media || !media.src) return'';
+
+  /*useEffect(() => {
     if (!imgWrapper || !stageWrapper) return;
 
     // Setup stageTimeline for stage
@@ -118,17 +119,17 @@ const Stage = ({ mediaSrc, overlay, data, addToMainTimeline, duration }) => {
 
     // Kill stageTimeline on component detach
     return () => timeline.kill();
-  }, [imgWrapper, addToMainTimeline, duration, stageWrapper, mediaSrc, data]);
+  }, [imgWrapper, addToMainTimeline, duration, stageWrapper, mediaSrc, data]);*/
 
   return (
-    <StageWrapper ref={element => setStageWrapper(element)}>
-      <ImgWrapper ref={element => setImgWrapper(element)} >
-        <Img src={(mediaSrc.indexOf("http") === 0 ? '' : ENDPOINT ) + mediaSrc}/>
-        {overlay && (
-          <OverlayText top={overlay.positionX} left={overlay.positionY}>
+    <StageWrapper>
+      <ImgWrapper>
+        <Img src={(media.src.indexOf("http") === 0 ? '' : ENDPOINT ) + media.src}/>
+        {media.overlay && (
+          <OverlayText top={media.overlay.positionX} left={media.overlay.positionY}>
             <div>
-              <h1>{overlay.title}</h1>
-              <span>{overlay.text}</span>
+              <h1>{media.overlay.title}</h1>
+              <span>{media.overlay.text}</span>
             </div>
           </OverlayText>
         )}

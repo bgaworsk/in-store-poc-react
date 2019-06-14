@@ -1,7 +1,6 @@
-import React,{ useEffect, useState }  from 'react';
+import React,{ useEffect }  from 'react';
 import styled from 'styled-components';
 import logo from './logo.svg';
-import { TweenMax, TimelineMax } from "gsap/all";
 
 const Loader = styled.div`
   position: absolute;
@@ -28,17 +27,12 @@ const LoadingIndicator = styled.div`
 `;
 
 export default ({ isLoadComplete, loadComplete, setLoaderHidden }) => {
-  const [loadingIndicator, setLoadingIndicator] = useState(null);
-  const [logo, setLogo] = useState(null);
-  const [loader, setLoader] = useState(null);
 
   useEffect(() => {
-    // Do not render animation, if load is already completed or DOM elements are not available
-    if (isLoadComplete || loadingIndicator === null || logo === null) return;
+    // Do not render animation, if load is already completed
+    if (isLoadComplete) return;
 
-    let loaderTimeline;
-
-    const updateLoadingIndicatorFn = () =>
+    /*const updateLoadingIndicatorFn = () =>
       TweenMax.set(loadingIndicator, {scaleX:loaderTimeline.progress(), transformOrigin:"0px 0px"});
     ;
 
@@ -50,12 +44,13 @@ export default ({ isLoadComplete, loadComplete, setLoaderHidden }) => {
     if (isLoadComplete && loader) {
       TweenMax.to(loader, 0.5, {y: -loader.offsetHeight, onComplete: setLoaderHidden});
     }
-  }, [isLoadComplete, loader, setLoaderHidden]);
+  }, [isLoadComplete, loader, setLoaderHidden]);*/
+  });
 
   return (
-    <Loader ref={element => setLoader(element)}>
-      <Logo ref={element => setLogo(element)}/>
-      <LoadingIndicator ref={element => setLoadingIndicator(element)}/>
+    <Loader>
+      <Logo/>
+      <LoadingIndicator/>
     </Loader>
   );
 }

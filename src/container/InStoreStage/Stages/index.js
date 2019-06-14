@@ -1,14 +1,13 @@
 import React, { useEffect } from 'react';
 import {observer} from 'mobx-react';
 import styled from 'styled-components';
-import { TimelineMax } from 'gsap/all';
 import stageState from '../state/stage';
 import deviceState from '../state/device';
 import colors from '../../../lib/coremedia-colors';
 import Stage from './Stage';
 import logo from '../Loader/logo.svg'
 
-const StageWrapper = styled.div`
+const StagesWrapper = styled.div`
   position: relative;
   background: no-repeat center url(${logo});
   background-size: 50% 50%;
@@ -29,8 +28,6 @@ const Stages = ({ loaderIsHidden }) => {
 
   const playlistId = stageState.playlistId;
 
-
-
   // Fetch playlist, if required
   useEffect(() => {
     if (stageState.playlistId === null) {
@@ -43,7 +40,7 @@ const Stages = ({ loaderIsHidden }) => {
   }
 
   else if (stageState.playlistId) {
-    const mainTimeline = new TimelineMax({
+    /*const mainTimeline = new TimelineMax({
       repeat: 0,
       delay: .7,
       paused: true,
@@ -59,29 +56,15 @@ const Stages = ({ loaderIsHidden }) => {
       mainTimeline.add(timeline);
       if (++timelineCallbackCount === stageState.availableStages.length) {
         console.log('Starting main timeline');
+        mainTimeline.resume();
       }
-    }
+    }*/
 
     // Render each state to the DOM and add their timeline to the main timeline
     return (
-      <StageWrapper>
-        {stageState.availableStages.map((stage, index) => {
-          const media = stage.media;
-          const data = stage.data;
-
-          if (!media.src) return'';
-
-          return (
-            <Stage
-              key={index}
-              mediaSrc={media.src}
-              overlay={media.overlay}
-              data={data}
-              duration={stage.duration}
-              addToMainTimeline={addToMainTimeline}/>
-          )
-        })}
-        </StageWrapper>
+      <StagesWrapper>
+        {stageState.availableStages.map((stage, index) => <Stage key={index} stage={stage} />)}
+      </StagesWrapper>
     )
   }
 
