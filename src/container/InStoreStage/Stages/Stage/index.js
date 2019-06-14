@@ -1,8 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { useSpring, animated, config } from 'react-spring';
+import { useTransition, animated } from 'react-spring';
 import { ENDPOINT } from "../../lib/stage-client";
 
+const DEFAULT_TIMEOUT_IN_MS = 3000;
+const DEFAULT_TIMEOUT_FIRST_DATA_IN_MS = 2000;
+const DEFAULT_TIMEOUT_DATA_IN_MS = 5000;
 const QUICK_INFO_WIDTH = "20vw";
 
 const StageWrapper = styled.div`
@@ -49,7 +52,7 @@ const Box = styled(animated.div)`
   left: ${props => props.left}
   will-change: left;
 `;
-
+/*
 const QuickInfoTitle = styled.h2`
   font-size: 1.5rem;
   font-weight: 700;
@@ -77,40 +80,51 @@ const QuickInfoPriceOld = styled.p`
 const QuickInfoSku = styled.span`
   font-size: 13px;
   color: #666;
-`;
+`;*/
 
-const Stage = ({ stage, opacity, visibility, stageCompleted }) => {
-  useEffect(() => {
-    // If no data is to be displayed, show stage for 3 seconds
-    //if (!data || data.length === 0) {
-    const timeout = setTimeout(() => {
-      console.log('Completed stage', stage);
-      stageCompleted();
-    }, 3000);
-    return () => clearTimeout(timeout);
-    /*}
-    // Else show data box for each
+const Stage = ({ stage, stageCompleted }) => {
+
+  const [index, setIndex] = useState(-1);
+
+  const scheduleNextData = useCallback(() => {
+    // If index is greater than length, then the last box has just left
+    if (index >= stage.data.length) {
+      console.log('All data displayed');
+    }
+    // Else schedule switch to next data in constant amount of time
     else {
-      console.log('I have', data.length);
-      //const timeout = setTimeout(() => onComplete(), 3000);
-      //return () => clearTimeout(timeout);
-    }*/
-  }, [stageCompleted]);
+      setTimeout(() => {
+        setIndex(value => (value+1));
+      }, index < 0 ? DEFAULT_TIMEOUT_FIRST_DATA_IN_MS : DEFAULT_TIMEOUT_DATA_IN_MS);
+    }
+  }, [stage.data.length, index]);
+
+  const transitions = useTransition(index, null, {
+    from: {left: (index % 2 === 0) ? '-20vw' : '100vw'}, // Even elements are shown left, odd right
+    initial: () => {
+      // Start the first transition on initial transition
+      scheduleNextData();
+    },
+    enter: {left: (index % 2 === 0) ? '0vw' : '80vw'},
+    leave: () => {
+      // Then schedule the switch on the leave of each box
+      scheduleNextData();
+      return {left: (index % 2 === 0) ? '100vw' : '-20vw'} // On leave index is already at the new box, so we need to reverse the odd/even rule
+    }
+  });
+
+  // If there's no data, show image for a constant amount of time
+  useEffect(() => {
+    if (!stage.data || stage.data.length === 0) {
+      const timeout = setTimeout(() => {
+        stageCompleted();
+      }, DEFAULT_TIMEOUT_IN_MS);
+      return () => clearTimeout(timeout);
+    }
+  }, [stageCompleted, stage.data, scheduleNextData]);
 
   // TODO Support stages without media
   if (!stage.media || !stage.media.src) return'';
-
-  /*
-  const props = useSpring({
-    from: {left: '-20px'},
-    to: async next => {
-      while(1){
-        await next({left: '0px'});
-        await next({left: '-20px'});
-      }
-    },
-    //onRest: onComplete
-  });*/
 
   return (
     <StageWrapper>
@@ -125,7 +139,16 @@ const Stage = ({ stage, opacity, visibility, stageCompleted }) => {
           </OverlayText>
         )}
       </ImgWrapper>
-
+      {transitions.map(({ item, key, props}) => {
+        if (item !== null && item > -1 && item < stage.data.length) return (
+          <Box
+            key={key}
+            style={props}>
+            {stage.data[item].title}
+          </Box>
+        );
+        else return '';
+      })};
     </StageWrapper>
   )
 };
