@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useSpring, animated, config } from 'react-spring';
 import { ENDPOINT } from "../../lib/stage-client";
@@ -13,8 +13,6 @@ const StageWrapper = styled.div`
   margin: 0;
   padding: 0;
   top: 0;
-  opacity: 0;
-  visibility: hidden;
 `;
 
 const ImgWrapper = styled(animated.div)`
@@ -81,25 +79,28 @@ const QuickInfoSku = styled.span`
   color: #666;
 `;
 
-const Stage = ({ stage,  }) => {
-  // TODO Support stages without media
-  if (!stage.media || !stage.media.src) return'';
-
-  /*
+const Stage = ({ stage, opacity, visibility, stageCompleted }) => {
   useEffect(() => {
     // If no data is to be displayed, show stage for 3 seconds
-    if (!data || data.length === 0) {
-      //const timeout = setTimeout(() => onComplete(), 3000);
-      //return () => clearTimeout(timeout);
-    }
+    //if (!data || data.length === 0) {
+    const timeout = setTimeout(() => {
+      console.log('Completed stage', stage);
+      stageCompleted();
+    }, 3000);
+    return () => clearTimeout(timeout);
+    /*}
     // Else show data box for each
     else {
       console.log('I have', data.length);
       //const timeout = setTimeout(() => onComplete(), 3000);
       //return () => clearTimeout(timeout);
-    }
-  }, [onComplete, data]);
+    }*/
+  }, [stageCompleted]);
 
+  // TODO Support stages without media
+  if (!stage.media || !stage.media.src) return'';
+
+  /*
   const props = useSpring({
     from: {left: '-20px'},
     to: async next => {

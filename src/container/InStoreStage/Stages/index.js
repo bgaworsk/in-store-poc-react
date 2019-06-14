@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {observer} from 'mobx-react';
 import styled from 'styled-components';
+import { useTransition, animated } from 'react-spring';
 import stageState from '../state/stage';
 import deviceState from '../state/device';
 import colors from '../../../lib/coremedia-colors';
@@ -30,17 +31,13 @@ const Code = styled.code`
 const Stages = ({ loaderIsHidden }) => {
 
   const playlistId = stageState.playlistId;
+  const [currentStage, setCurrentStage] = useState(0);
 
-  /*const transitions = useTransition(
-    stageState.availableStages.length > 0 && stageState.availableStages[index],
-    item => item && item.id,
-    {
-      from: { opacity: 0 },
-      enter: { opacity: 1 },
-      leave: { opacity: 0 },
-      config: config.molasses,
-    }
-  );*/
+  const transitions = useTransition(currentStage, null, {
+    from: {opacity: 0},
+    enter: {opacity: 1},
+    leave: {opacity: 0}
+  });
 
   // Fetch playlist, if required
   useEffect(() => {
@@ -49,18 +46,28 @@ const Stages = ({ loaderIsHidden }) => {
     }
   }, [playlistId]);
 
-  //const nextStage = () => void setIndex(index => (index+1) % stageState.availableStages.length);
+  const nextStage = () => void setCurrentStage(index => (index+1) % stageState.availableStages.length);
 
   if (stageState.playlistId && stageState.availableStages.length === 0) {
     return <p>No stages for device ID <Code>{deviceState.deviceId}</Code></p>;
   }
 
   else if (stageState.playlistId) {
-      return (
-        <StagesWrapper>
-          {stageState.availableStages.map((stage, key) => <Stage key={key} stage={stage} />)}
-        </StagesWrapper>
-      )
+    return (
+      <StagesWrapper>
+        {transitions.map(({item, key, props}) =>
+          <animated.div key={key} style={props}>
+            <Stage
+              key={key}
+              stage={stageState.availableStages[item]}
+              opacity={props.opacity}
+              visibility={props.visibility}
+              stageCompleted={nextStage}
+            />
+          </animated.div>
+        )}
+      </StagesWrapper>
+    );
   }
 
   else return <p>Loading stage …</p>;

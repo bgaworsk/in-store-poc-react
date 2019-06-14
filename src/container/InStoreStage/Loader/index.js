@@ -1,6 +1,6 @@
 import React,{ useState }  from 'react';
 import styled from 'styled-components';
-import { useSpring, config, animated } from 'react-spring';
+import { useSpring, animated } from 'react-spring';
 import logo from './logo.svg';
 
 const Loader = styled(animated.div)`
@@ -13,6 +13,7 @@ const Loader = styled(animated.div)`
   color: #fff;
   width: 100vw;
   height: 100vh;
+  will-change: top;
 `;
 
 const Container = styled.div`
@@ -23,6 +24,7 @@ const Logo = styled(animated.img)`
   width: 100%;
   height: 100%;
   opacity: 0;
+  will-change: width, height, opacity;
 `;
 
 const LogoContainer = styled.div`
@@ -41,6 +43,7 @@ const LoadingIndicator = styled(animated.div)`
   border-radius: 50px;
   transform-origin: 0 0;
   transform: scaleX(0);
+  will-change: transform;
 `;
 
 export default ({ loadComplete }) => {
@@ -56,7 +59,7 @@ export default ({ loadComplete }) => {
 
   // Animate progress bar, when completed, set loaded to true
   const loadingProps = useSpring({
-    from: {x:0}, to: {x:1},
+    from: {transform: 'scaleX(0)'}, to: {transform: 'scaleX(1)'},
     onRest: () => setIsLoaded(true)
   });
 
@@ -72,7 +75,7 @@ export default ({ loadComplete }) => {
         <LogoContainer>
           <Logo src={logo} alt="CoreMedia Logo" style={logoProps}/>
         </LogoContainer>
-        <LoadingIndicator style={{ transform: loadingProps.x.interpolate(x => `scaleX(${x})`) }}/>
+        <LoadingIndicator style={loadingProps}/>
       </Container>
     </Loader>
   );
