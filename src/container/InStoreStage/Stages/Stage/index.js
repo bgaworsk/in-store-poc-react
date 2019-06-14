@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { useTransition, animated } from 'react-spring';
+import { useTransition, animated, useSpring } from 'react-spring';
 import { ENDPOINT } from "../../lib/stage-client";
 
 const DEFAULT_TIMEOUT_IN_MS = 3000;
@@ -89,7 +89,8 @@ const Stage = ({ stage, stageCompleted }) => {
   const scheduleNextData = useCallback(() => {
     // If index is greater than length, then the last box has just left
     if (index >= stage.data.length) {
-      console.log('All data displayed');
+      // All data is displayed, call next stage after timeout
+      setTimeout(() => stageCompleted(), DEFAULT_TIMEOUT_FIRST_DATA_IN_MS);
     }
     // Else schedule switch to next data in constant amount of time
     else {
@@ -97,10 +98,11 @@ const Stage = ({ stage, stageCompleted }) => {
         setIndex(value => (value+1));
       }, index < 0 ? DEFAULT_TIMEOUT_FIRST_DATA_IN_MS : DEFAULT_TIMEOUT_DATA_IN_MS);
     }
-  }, [stage.data.length, index]);
+  }, [stage.data.length, index, stageCompleted]);
 
   const transitions = useTransition(index, null, {
-    from: {left: (index % 2 === 0) ? '-20vw' : '100vw'}, // Even elements are shown left, odd right
+    // Even elements are shown left, odd right
+    from: {left: (index % 2 === 0) ? '-20vw' : '100vw'},
     initial: () => {
       // Start the first transition on initial transition
       scheduleNextData();
@@ -109,7 +111,8 @@ const Stage = ({ stage, stageCompleted }) => {
     leave: () => {
       // Then schedule the switch on the leave of each box
       scheduleNextData();
-      return {left: (index % 2 === 0) ? '100vw' : '-20vw'} // On leave index is already at the new box, so we need to reverse the odd/even rule
+      // On leave index is already at the new box, so we need to reverse the odd/even rule
+      return {left: (index % 2 === 0) ? '100vw' : '-20vw'}
     }
   });
 
@@ -123,12 +126,21 @@ const Stage = ({ stage, stageCompleted }) => {
     }
   }, [stageCompleted, stage.data, scheduleNextData]);
 
+  const imgWrapperProps = useSpring({
+    from: { left: '0vw' },
+    to: {
+      left: index < 0 || index >= stage.data.length
+        ? '0vw'
+        : index % 2 === 0 ? '20vw' : '-20vw'
+    }
+  });
+
   // TODO Support stages without media
   if (!stage.media || !stage.media.src) return'';
 
   return (
     <StageWrapper>
-      <ImgWrapper>
+      <ImgWrapper style={imgWrapperProps}>
         <Img src={(stage.media.src.indexOf("http") === 0 ? '' : ENDPOINT ) + stage.media.src}/>
         {stage.media.overlay && (
           <OverlayText top={stage.media.overlay.positionX} left={stage.media.overlay.positionY}>
