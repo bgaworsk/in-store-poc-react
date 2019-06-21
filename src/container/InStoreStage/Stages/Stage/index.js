@@ -36,7 +36,7 @@ const Stage = ({ stage, stageCompleted }) => {
   }
 
   return (
-    <StageWrapper>
+    <StageWrapper onClick={() => stageCompleted()}>
       <Media stage={stage} stageCompleted={stageCompleted} />
     </StageWrapper>
   );

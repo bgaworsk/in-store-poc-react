@@ -3,7 +3,7 @@ import {animated, useSpring, useTransition} from 'react-spring'
 import client from '../../../lib/stage-client'
 import styled from 'styled-components'
 
-const DEFAULT_TIMEOUT_IN_MS = 3000;
+const DEFAULT_TIMEOUT_IN_MS = 10000;
 const DEFAULT_TIMEOUT_FIRST_DATA_IN_MS = 2000;
 const DEFAULT_TIMEOUT_DATA_IN_MS = 5000;
 const QUICK_INFO_WIDTH = "20vw";
@@ -25,8 +25,19 @@ const Img = styled.img`
 
 const OverlayText = styled.div`
   position: absolute;
-  top: ${props => props.top}%;
+  top: ${props => props.top * -1}%;
   left: ${props => props.left}%;
+  font-size: 2.5rem;
+  
+  h1 {
+    font-size: 5rem;
+  }
+  .p--heading-1 {
+    font-size: 5rem;
+  } 
+  .align--center {
+    text-align: center;
+  }
 `;
 
 const Box = styled(animated.div)`
@@ -82,8 +93,8 @@ const Image = ({ stage, stageCompleted }) => {
       // All data is displayed, call next stage after timeout
       setTimeout(() => stageCompleted(), DEFAULT_TIMEOUT_FIRST_DATA_IN_MS);
     }
-    // Else schedule switch to next data in constant amount of time
-    else {
+    // Else schedule switch to next data in constant amount of time, if data is available
+    else if (index >= 0) {
       setTimeout(() => {
         setIndex(value => (value+1));
       }, index < 0 ? DEFAULT_TIMEOUT_FIRST_DATA_IN_MS : DEFAULT_TIMEOUT_DATA_IN_MS);
@@ -132,7 +143,7 @@ const Image = ({ stage, stageCompleted }) => {
         {stage.media.overlay && (
           <OverlayText top={stage.media.overlay.positionX} left={stage.media.overlay.positionY}>
             <div>
-              <h1>{stage.media.overlay.title}</h1>
+              {stage.media.overlay.title && <h1>{stage.media.overlay.title}</h1>}
               <div dangerouslySetInnerHTML={{__html:stage.media.overlay.text}} />
             </div>
           </OverlayText>
