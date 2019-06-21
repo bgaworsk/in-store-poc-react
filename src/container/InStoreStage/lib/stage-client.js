@@ -31,7 +31,7 @@ export default {
 
   prefetchMedia(items) {
     items.map(item => {
-      const mediaSrc = item.media.src;
+      const mediaSrc = item.media && item.media.src;
       if (mediaSrc) {
         let uri = (mediaSrc.indexOf("http") === 0 ? '' : ENDPOINT ) + mediaSrc;
         axios.get(uri).then(() => {
