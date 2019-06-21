@@ -11,8 +11,8 @@ const MEDIA_TYPE_MAPPING = {
 const StageWrapper = styled.div`
   position: absolute;
   background-size: 50% 50%;
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   margin: 0;
   padding: 0;
   top: 0;

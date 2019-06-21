@@ -7,7 +7,7 @@ const Setup = styled.div`
   color: #1a1919;
 
   input {
-    font-size: 1.5rem;
+    font-size: 2vh;
     width: 100%;
     border-radius: 10px;
     border-color: #999;
@@ -20,7 +20,7 @@ const Setup = styled.div`
   }
   
   button {
-    font-size: 1.5rem;
+    font-size: 2vh;
     margin-top: 1em;
     padding: 0.3em 0;
     border-radius: 5px;

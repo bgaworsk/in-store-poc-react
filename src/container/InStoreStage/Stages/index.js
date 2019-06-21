@@ -14,8 +14,8 @@ const StagesWrapper = styled.div`
   left: 0;
   background: no-repeat center url(${logo});
   background-size: 50% 50%;
-  height: 100vh;
-  width: 100vw;
+  height: 100%;
+  width: 100%;
   margin: 0;
   padding: 0;
   will-change: opacity;

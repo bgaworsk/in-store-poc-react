@@ -7,7 +7,7 @@ import InStoreStage from '../src/container/InStoreStage';
 
 const augmentedComponents = {...components, InStoreStage };
 
-window.coreMediaWidget = (rootNode, component) => {
+window.coreMediaWidget = (rootNode, component, width, height) => {
   // Assume root node is an ID
   let node = undefined;
   if (typeof rootNode !== 'object') {
@@ -21,7 +21,7 @@ window.coreMediaWidget = (rootNode, component) => {
     const Component = typeof component === 'string' ? augmentedComponents[component] : component;
     if (Component) {
       console.log('Replacing DOM node "%s" with CoreMedia component %s', node, component);
-      ReactDOM.render(<App><Component /></App>, node);
+      ReactDOM.render(<App><Component width={width} height={height}/></App>, node);
     } else {
       console.error('Unknown component %s', component);
     }

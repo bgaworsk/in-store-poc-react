@@ -11,8 +11,8 @@ const Loader = styled(animated.div)`
   text-align: center;
   background-color: #000;
   color: #fff;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   will-change: top;
 `;
 
@@ -31,13 +31,13 @@ const LogoContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20vw;
-  height: 20vh;
+  width: 100%;
+  height: 100%;
   margin: 24px auto;
 `;
 
 const LoadingIndicator = styled(animated.div)`
-  width: 20vw;
+  width: 100%;
   height: 5px;
   background-color: white;
   border-radius: 50px;
@@ -65,7 +65,7 @@ export default ({ loadComplete }) => {
 
   // Once loaded, the whole loader screen moves up, when completed the load completed is called back
   const loaderProps = useSpring({
-    from: {top: '0vh'}, to: { top: isLoaded ? '-100vh' : '0vh'},
+    from: {top: '0%'}, to: { top: isLoaded ? '-100%' : '0%'},
     onRest: loadComplete
   });
 

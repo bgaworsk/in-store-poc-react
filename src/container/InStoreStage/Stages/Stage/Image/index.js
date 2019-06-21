@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import {animated, useSpring, useTransition} from 'react-spring'
+import ReactResizeDetector from 'react-resize-detector'
 import client from '../../../lib/stage-client'
 import styled from 'styled-components'
 
@@ -10,15 +11,16 @@ const QUICK_INFO_WIDTH = "20vw";
 
 const ImgWrapper = styled(animated.div)`
   position: relative;
-  max-height: 100vh;
-  max-width: 100vw;
+  max-height: 100%;
+  max-width: 100%;
   overflow: hidden;
   will-change: left;
 `;
 
 const Img = styled.img`
-  min-width: 100vw;
-  min-height: 100vh;
+  min-width: 100%;
+  min-height: 100%;
+  width: 100%;
   margin: 0;
   padding: 0;
 `;
@@ -27,13 +29,13 @@ const OverlayText = styled.div`
   position: absolute;
   top: ${props => props.top * -1}%;
   left: ${props => props.left}%;
-  font-size: 2.5rem;
+  font-size: calc(${props => props.width} * .02);
   
   h1 {
-    font-size: 5rem;
+    font-size: calc(${props => props.width} * .05);
   }
   .p--heading-1 {
-    font-size: 5rem;
+    font-size: calc(${props => props.width} * .05);
   } 
   .align--center {
     text-align: center;
@@ -46,7 +48,7 @@ const Box = styled(animated.div)`
   color: #000;
   top: 0;
   width: ${QUICK_INFO_WIDTH};
-  height: 100vh;
+  height: 100%;
   padding: 48px;
   background-color: #fff;
   text-align: ${props => props.align}
@@ -141,12 +143,16 @@ const Image = ({ stage, stageCompleted }) => {
       <ImgWrapper style={imgWrapperProps}>
         <Img src={client.formatMediaUrl(stage.media.src)}/>
         {stage.media.overlay && (
-          <OverlayText top={stage.media.overlay.positionX} left={stage.media.overlay.positionY}>
-            <div>
-              {stage.media.overlay.title && <h1>{stage.media.overlay.title}</h1>}
-              <div dangerouslySetInnerHTML={{__html:stage.media.overlay.text}} />
-            </div>
-          </OverlayText>
+          <ReactResizeDetector handleHeight>
+            {({ width }) => (
+              <OverlayText top={stage.media.overlay.positionX} left={stage.media.overlay.positionY} width={`${width}px`}>
+                <div>
+                  {stage.media.overlay.title && <h1>{stage.media.overlay.title}</h1>}
+                  <div dangerouslySetInnerHTML={{__html:stage.media.overlay.text}} />
+                </div>
+              </OverlayText>
+            )}
+          </ReactResizeDetector>
         )}
       </ImgWrapper>
       {transitions.map(({ item, key, props}) => {
@@ -156,9 +162,9 @@ const Image = ({ stage, stageCompleted }) => {
             style={props}>
             {stage.data[item].title}
           </Box>
-        );
+        )
         else return '';
-      })};
+      })}
     </>
   )
 

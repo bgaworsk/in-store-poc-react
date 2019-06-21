@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import client from '../../../lib/stage-client'
 
 const VideoPlayer = styled.video`
-  min-width: 100vw;
-  min-height: 100vh;
+  min-width: 100%;
+  min-height: 100%;
+  width: 100%;
 `;
 
 const Video = ({ stage, stageCompleted }) => (

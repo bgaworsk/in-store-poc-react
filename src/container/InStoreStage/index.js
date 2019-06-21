@@ -18,12 +18,10 @@ const Body = styled.div`
   }
 
   font-family: "Simplon Norm Regular", "Lucida Sans", "Lucida Sans Unicode", "Lucida Grande", Arial, Helvetica, sans-serif;
-  font-size: 2rem;
+  font-size: 2vh;
   color: #fff;
-  height: 100%;
-
-  width: 100vw;
-  height: 100vh;
+  height: ${props => props.height ? props.height : '100%'};
+  width: ${props => props.width ? props.width : '100%'};
   background-image: linear-gradient(${colors.lightBlue}, ${colors.blue});
   display: flex; 
   flex-direction: column; 
@@ -33,6 +31,9 @@ const Body = styled.div`
   .hidden {
     display: none;
   }
+  
+  position: relative;
+  overflow: hidden;
 `;
 
 const Logo = styled.div`
@@ -44,7 +45,7 @@ const Logo = styled.div`
   width: 100%;
 `;
 
-const InStoreStorage = () => {
+const InStoreStorage = ({ width, height }) => {
 
   const isSetup = deviceState.deviceId && deviceState.clientId && deviceState.deviceIdConfirmed;
   const [isLoadComplete, setLoadComplete] = useState(false);
@@ -59,7 +60,7 @@ const InStoreStorage = () => {
     : <Setup storeDeviceId={deviceState.setDeviceId}/>
 
   return (
-    <Body>
+    <Body width={width} height={height}>
       {child}
       <textarea id="console" name="console" className="hidden" />
       <Logo />
