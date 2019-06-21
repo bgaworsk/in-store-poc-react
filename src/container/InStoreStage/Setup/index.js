@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import colors from '../../../lib/coremedia-colors';
 import deviceState from '../state/device';
@@ -65,14 +65,14 @@ const AlignRight = styled.div`
 
 export default ({ storeDeviceId }) => {
   const [deviceId, setDeviceId] = useState(deviceState.deviceId);
-  const [input, setInput] = useState(null);
+  const input = useRef(null);
   const updateState = event => setDeviceId(event.target.value);
   const keyUp = event => event.keyCode === 13 && storeDeviceId(deviceId);
 
   useEffect(() => {
     if (!input) return;
-    input.focus();
-    input.select();
+    input.current.focus();
+    input.current.select();
   },[input] );
 
   return (
@@ -90,7 +90,7 @@ export default ({ storeDeviceId }) => {
             id="setup_deviceId"
             type="text"
             name="deviceId"
-            ref={element => setInput(element)}
+            ref={input}
             value={deviceId}
             onChange={updateState}
             onKeyUp={keyUp} />

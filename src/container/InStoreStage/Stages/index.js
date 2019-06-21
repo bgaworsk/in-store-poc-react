@@ -46,9 +46,9 @@ const Stages = ({ loaderIsHidden }) => {
     }
   }, [playlistId]);
 
-  const nextStage = () => void setCurrentStage(index => (index+1) % stageState.availableStages.length);
+  const nextStage = () => void setCurrentStage(index => (index+1) % stageState.availableStagesWithMedia.length);
 
-  if (stageState.playlistId && stageState.availableStages.length === 0) {
+  if (stageState.playlistId && stageState.availableStagesWithMedia.length === 0) {
     return <p>No stages for device ID <Code>{deviceState.deviceId}</Code></p>;
   }
 
@@ -59,7 +59,7 @@ const Stages = ({ loaderIsHidden }) => {
           <animated.div key={key} style={props}>
             <Stage
               key={key}
-              stage={stageState.availableStages[item]}
+              stage={stageState.availableStagesWithMedia[item]}
               opacity={props.opacity}
               visibility={props.visibility}
               stageCompleted={nextStage}

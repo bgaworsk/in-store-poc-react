@@ -40,6 +40,10 @@ export default {
       }
       return '';
     });
+  },
+
+  formatMediaUrl(url) {
+    return (url.indexOf("http") === 0 ? '' : ENDPOINT ) + url;
   }
 
 }
