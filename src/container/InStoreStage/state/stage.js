@@ -1,4 +1,4 @@
-import {configure, observable, action, runInAction} from 'mobx';
+import {configure, observable, action, runInAction, computed} from 'mobx';
 import client from '../lib/stage-client';
 import demoData from './demo.json';
 
@@ -13,13 +13,13 @@ const stageState = observable.object({
     client.fetchPlaylistJSON(deviceId, clientId).then(
       playlist => runInAction(() => {
         if (!playlist) {
-          console.warn('Loaded playlist is empty');
-          this.playlistId = demoData.id;
+          console.warn('Loaded playlist is empty, falling back to demo date, using', demoData.items);
           this.availableStages = demoData.items;
+          this.playlistId = demoData.id;
           return;
         }
-        this.playlistId = playlist.id;
         this.availableStages = playlist.items;
+        this.playlistId = playlist.id;
 
         client.prefetchMedia(playlist.items);
 
@@ -33,12 +33,17 @@ const stageState = observable.object({
       this.currentStage = this.availableStages[this.currentStageIndex];
       console.log('Transitioning to stage', this.currentStageIndex);
     }
+  },
+
+  get availableStagesWithMedia() {
+    return this.availableStages.filter(stage => stage.media && stage.media.src);
   }
 
 }, {
 
   fetchPlaylist: action,
-  nextStage: action.bound
+  nextStage: action.bound,
+  availableStagesWithMedia: computed
 
 });
 
