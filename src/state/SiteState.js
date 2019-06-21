@@ -40,6 +40,6 @@ const SiteState = observable.object({
 
 });
 
-SiteState.loadSites();
+// TODO load on demand: SiteState.loadSites();
 
 export default SiteState;
