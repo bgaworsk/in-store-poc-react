@@ -6,7 +6,7 @@ import Video from './Video';
 const MEDIA_TYPE_MAPPING = {
   IMAGE: Image,
   VIDEO: Video
-}
+};
 
 const StageWrapper = styled.div`
   position: absolute;
