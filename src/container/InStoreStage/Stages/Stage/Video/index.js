@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import styled from 'styled-components';
 import client from '../../../lib/stage-client'
 
@@ -8,13 +8,20 @@ const VideoPlayer = styled.video`
   width: 100%;
 `;
 
-const Video = ({ stage, stageCompleted }) => (
-  <VideoPlayer
-    autoPlay={true}
-    loop={false}
-    controls={false}
-    onEnded={() => stageCompleted()}
-    src={client.formatMediaUrl(stage.media.src)}/>
-);
+const Video = ({ stage, stageCompleted }) => {
+
+  const videoPlayer = useRef(null);
+  useEffect(() => videoPlayer.current.play() && undefined, [videoPlayer]);
+
+  return (
+    <VideoPlayer
+      autoPlay={false}
+      loop={false}
+      controls={false}
+      onEnded={() => stageCompleted()}
+      ref={videoPlayer}
+      src={client.formatMediaUrl(stage.media.src)}/>
+  );
+}
 
 export default Video;
