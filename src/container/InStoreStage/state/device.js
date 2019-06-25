@@ -1,5 +1,6 @@
 import {configure, observable, action} from 'mobx';
 import uuidv4 from 'uuid/v4';
+import stageState from './stage';
 
 configure({ enforceActions: "observed" });
 
@@ -31,26 +32,31 @@ const deviceState = observable.object({
 
   initialiseDeviceId() {
     this.deviceId = window.localStorage.getItem(DEVICE_ID);
-    let confirmed;
     if (!this.deviceId) {
       this.deviceId = uuidv4();
-      confirmed = 'unconfirmed';
+      this.deviceIdConfirmed = false;
     } else {
       this.deviceIdConfirmed = true;
-      confirmed = 'confirmed';
     }
-    console.log(`Device ID: ${this.deviceId}, ${confirmed}`);
+    console.log(`Device ID: ${this.deviceId}, ${this.deviceIdConfirmed ? 'confirmed' : 'unconfirmed'}`);
   },
   setDeviceId(id) {
     console.log(`Saving device id '${id}' to local storage and confirming it.`);
     window.localStorage.setItem(DEVICE_ID, id);
     this.deviceId = id;
     this.deviceIdConfirmed = true;
+  },
+  resetDeviceId(){
+    console.log(`Removing device id ${this.deviceId} from local storage.`);
+    window.localStorage.removeItem(DEVICE_ID);
+    stageState.resetPlaylist();
+    this.initialiseDeviceId();
   }
 
 }, {
 
-  setDeviceId: action.bound
+  setDeviceId: action.bound,
+  resetDeviceId: action.bound,
 
 });
 

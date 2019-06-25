@@ -49,7 +49,19 @@ const Stages = ({ loaderIsHidden }) => {
   const nextStage = () => void setCurrentStage(index => (index+1) % stageState.availableStagesWithMedia.length);
 
   if (stageState.playlistId && stageState.availableStagesWithMedia.length === 0) {
-    return <p>No stages for device ID <Code>{deviceState.deviceId}</Code></p>;
+    return (
+      <>
+        <p>
+          No stages for device ID
+        </p>
+        <p>
+          <Code>{deviceState.deviceId}</Code>
+        </p>
+        <p>
+          <button onClick={deviceState.resetDeviceId}>Reset Device ID</button>
+        </p>
+    </>
+    );
   }
 
   else if (stageState.playlistId) {

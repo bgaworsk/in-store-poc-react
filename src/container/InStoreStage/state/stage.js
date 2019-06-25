@@ -37,13 +37,19 @@ const stageState = observable.object({
 
   get availableStagesWithMedia() {
     return this.availableStages.filter(stage => stage.media && stage.media.src);
+  },
+
+  resetPlaylist() {
+    this.availableStages = [];
+    this.playlistId = null;
   }
 
 }, {
 
   fetchPlaylist: action,
   nextStage: action.bound,
-  availableStagesWithMedia: computed
+  availableStagesWithMedia: computed,
+  resetPlaylist: action.bound
 
 });
 
