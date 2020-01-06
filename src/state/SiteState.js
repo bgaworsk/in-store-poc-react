@@ -10,6 +10,7 @@ const SiteState = observable.object({
     HeadlessClient.getSites().then(
       response => {
         runInAction(() => {
+          console.log('WAA',  response);
           this.sites = response.data.content.sites;
         });
       }

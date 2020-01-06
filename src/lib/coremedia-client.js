@@ -1,8 +1,7 @@
 import ApolloClient from "apollo-boost";
 import { gql } from "apollo-boost";
 
-export const SERVER_HOST = 'https://caas-1901.livecontext.coremedia.com';
-export const SERVER_URL = `${SERVER_HOST}/graphql`;
+export const SERVER_URL = `${process.env.REACT_APP_SERVER_HOST}/graphql`;
 
 export const client = new ApolloClient({
   uri: SERVER_URL
@@ -59,7 +58,7 @@ export default {
     .replace(URI_TEMPLATE_WIDTH, width),
 
   // TODO Why is this hack needed?
-  dateToISO: date => date.substr(0, date.length-5)
+  dateToISO: date => (date && date.substr(0, date.length-5)) || null
 
 }
 

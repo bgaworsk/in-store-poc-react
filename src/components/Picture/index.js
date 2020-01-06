@@ -7,12 +7,12 @@ import { useSpring, animated } from 'react-spring'
 import Moment from 'react-moment'
 import Loading from '../Loading';
 import siteState from '../../state/SiteState';
-import HeadlessClient, { SERVER_HOST } from '../../lib/coremedia-client';
+import HeadlessClient from '../../lib/coremedia-client';
 import colors from '../../lib/coremedia-colors';
 import simplonNormRegular from '../../fonts/simplonnorm-regular-webxl-woff2-data.woff2';
 import simplonNormMedium from '../../fonts/simplonnorm-medium-webxl-woff2-data.woff2';
 
-const CALISTA_EN_US_ID = 'ced8921aa7b7f9b736b90e19afc2dd2a'; // TODO Hack
+const SITE_ID = process.env.REACT_APP_SITE_ID; // TODO Hack
 const LANDSCAPE_16x9 = 'landscape_ratio16x9';
 
 const ImgContainer = styled.div`
@@ -60,8 +60,11 @@ const Back = styled(animated.div)`
 
 // TODO No polyfill for img srcset loaded, this will not work in IE, e.g. https://www.npmjs.com/package/picturefill
 const Picture = () => {
-  const site = siteState.getSite(CALISTA_EN_US_ID);
-  let imageWidths = siteState.getCropWidthsOf(CALISTA_EN_US_ID, LANDSCAPE_16x9);
+  React.useEffect(() => {
+    siteState.loadSites();
+  }, []);
+  const site = siteState.getSite(SITE_ID);
+  let imageWidths = siteState.getCropWidthsOf(SITE_ID, LANDSCAPE_16x9);
 
   const [flipped, set] = useState(false);
   const { transform, opacity } = useSpring({
@@ -75,8 +78,7 @@ const Picture = () => {
       query={gql`
       {
         content {
-          picture(id:"5348") {
-            creationDate
+          picture(id:"${process.env.REACT_APP_PICTURE_ID}") {
             name
             title
             alt
@@ -87,15 +89,21 @@ const Picture = () => {
     `}
     >
       {({ loading, error, data }) => {
-        if (loading || !site) return <Loading />;
-        if (error) return <p>Error :(</p>;
+        console.log(loading, error, data, site);
+        if (loading) return <Loading />;
+        if (!site) return <p>Could not load site</p>;
+        if (error) {
+          console.log(error);
+          return <p>Error :(</p>;
+        }
 
         const picture = data.content.picture;
+        console.log(data);
 
         const srcSet = imageWidths.map(
           width => {
             const imgSrc = HeadlessClient.formatImageUrl(picture.uriTemplate, LANDSCAPE_16x9, width);
-            return `${SERVER_HOST}/${imgSrc} ${width}w`
+            return `${process.env.REACT_APP_SERVER_HOST}/${imgSrc} ${width}w`
           })
           .join(', ');
         let sizes = imageWidths
