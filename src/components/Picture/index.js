@@ -31,8 +31,8 @@ const ImgContainer = styled.div`
 
   font-family: "Simplon Norm Regular", "Lucida Sans", "Lucida Sans Unicode", "Lucida Grande", Arial, Helvetica, sans-serif;
   position: relative;
-  width: 100%;
-  height: 100%;
+  width: ${props => props.width ? props.width : '100%'};
+  height: ${props => props.height ? props.height : '100%'};
   
   strong {
     font-family: "Simplon Norm Medium", "Lucida Sans", "Lucida Sans Unicode", "Lucida Grande", Arial, Helvetica, sans-serif;
@@ -54,12 +54,13 @@ const Back = styled(animated.div)`
   height: 100%;
   width: 100%;
   padding: 4vw;
+  box-sizing: border-box;
   will-change: transform, opacity;
   color: #000;
 `;
 
 // TODO No polyfill for img srcset loaded, this will not work in IE, e.g. https://www.npmjs.com/package/picturefill
-const Picture = () => {
+const Picture = ({ width, height }) => {
   React.useEffect(() => {
     siteState.loadSites();
   }, []);
@@ -83,6 +84,7 @@ const Picture = () => {
             title
             alt
             uriTemplate
+            modificationDate
           }
         }
       }
@@ -112,7 +114,7 @@ const Picture = () => {
         sizes = sizes.join(', ');
 
         return (
-          <ImgContainer onClick={() => set(state => !state)}>
+          <ImgContainer onClick={() => set(state => !state)} width={width} height={height}>
             <Img src="data:image/gif;base64,R0lGODlhAQABAAAAADs="
                  srcSet={srcSet}
                  sizes={sizes}
@@ -123,7 +125,7 @@ const Picture = () => {
               <p><strong>Title:</strong> {picture.title}</p>
               <p>
                 <strong>Created:</strong>&nbsp;
-                <Moment format='DD.MM.YYYY HH:mm'>{HeadlessClient.dateToISO(picture.creationDate)}</Moment>
+                <Moment format='DD.MM.YYYY HH:mm'>{HeadlessClient.dateToISO(picture.modificationDate)}</Moment>
               </p>
             </Back>
           </ImgContainer>

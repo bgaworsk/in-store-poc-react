@@ -27,10 +27,10 @@ const Img = styled.img`
 
 const OverlayText = styled.div`
   position: absolute;
-  top: ${props => (props.top * -1) - 10}%;
-  left: ${props => props.left + 10}%;
+  top: ${props => (props.top)}%;
+  left: ${props => props.left}%;
   font-size: calc(${props => props.width} * .02);
-  text-shadow: 0px 0px 20px rgba(0,0,0,0.8);
+  text-shadow: 0 0 10px rgba(0,0,0,0.8);
   
   h1 {
     font-size: calc(${props => props.width} * .05);
